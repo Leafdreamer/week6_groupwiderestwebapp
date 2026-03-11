@@ -138,6 +138,9 @@ class ProductIDRest(Resource):
         """
         data = request.json
 
+        if not ValidateProduct(data):
+            return {'message': 'Invalid data'}, 422
+
         for x in products:
             if x['id'] == id:
                 x.update(data)
@@ -219,13 +222,101 @@ class OrderREST(Resource):
             }
         
         if ValidateOrder(newOrder):
-            products.append(newOrder)
+            orders.append(newOrder)
             return newOrder, 201
         else: return {'message': 'Unable to parse data'}, 422
 
 # Class for functions related to a single order (GET[id], PUT, DELETE)
 class OrderIDRest(Resource):
-    pass
+    def get(self, id):
+        """
+        Find a specific order based on its ID
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Returns order
+          404:
+            description: Order not found
+        """
+        for x in orders:
+            if x['id'] == id:
+                return x, 200
+        return {'message': 'Order not found'}, 404
+    
+    def put(self, id):
+        """
+        Update an existing order
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+          - in: body
+            name: body
+            required: true
+            schema:
+                type: object
+                required:
+                    - product_id
+                    - quantity
+                    - date
+                properties:
+                    product_id:
+                        type: integer
+                    quantity:
+                        type: integer
+                    date:
+                        type: boolean
+        responses:
+          200:
+            description: Successfully updated the order
+          404:
+            description: Order not found
+        """
+        data = request.json
+
+        if not ValidateOrder(data):
+            return {'message': 'Invalid data'}, 422
+
+        for x in orders:
+            if x['id'] == id:
+                # The next few lines are to keep/change the order's DateTime
+                # If input is True, then DateTime is updated to now
+                # If input is False, then DateTime is left alone
+                if data['date'] == True:
+                    data['date'] = datetime.now().isoformat()
+                else:
+                    data['date'] = x['date']
+                x.update(data)
+                return x, 200
+        return {'message': 'Order not found'}, 404
+    
+    def delete(self, id):
+        """
+        Delete an order
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Successfully deleted the order
+          404:
+            description: Order not found
+        """
+        for i, x in enumerate(orders):
+            if x['id'] == id:
+                dOrder = orders.pop(i)
+                return dOrder, 200
+        return {'message': 'Order not found'}, 404
 
 ### REST SERVICES FOR TRANSACTIONS
 # Class for functions relating to all transactions (GET, POST)
