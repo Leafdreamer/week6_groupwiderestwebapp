@@ -8,7 +8,6 @@ class Product:
         self.quantity = quantity
         self.price = price
         
-
 class Order:
     def __init__(self, product_id, quantity, date=None):
         self.product_id = product_id  #Foreign key
@@ -22,3 +21,10 @@ class Transaction:
         self.quantity = quantity
         self.date = date or datetime.now().isoformat()
         
+def ValidateProduct(product):
+    try:
+        int(product['quantity'])
+        float(product['price'])
+        return True
+    except:
+        return False
