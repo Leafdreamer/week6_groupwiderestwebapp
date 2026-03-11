@@ -321,11 +321,157 @@ class OrderIDRest(Resource):
 ### REST SERVICES FOR TRANSACTIONS
 # Class for functions relating to all transactions (GET, POST)
 class TransactionREST(Resource):
-    pass
+    def get(self):
+        """
+        Get all transactions
+        ---
+        responses:
+          200:
+            description: Returns list of transactions
+        """
+        return transactions, 200    
+    
+    def post(self):
+        """
+        Create a new transaction
+        ---
+        parameters:
+            -   in: body
+                name: transaction
+                required:
+                schema:
+                    type: object
+                    required:
+                        - type
+                        - product_id
+                        - quantity
+                    properties:
+                        type:
+                            type: string
+                        product_id:
+                            type: integer
+                        quantity:
+                            type: integer
+        responses:
+          201:
+            description: New product created
+          404:
+            description: Cannot find product tied to product_id
+          422:
+            description: Invalid data (quantity must be INT)
+        """
+        data = request.json
+        potentialID = data['product_id']
+        
+        if ProductIDRest.get(self, potentialID)[1] == 404:
+            return {'message': 'Cannot make a transaction for product that does not exist'}, 404
+
+        currentID = transactions[-1]['id'] + 1
+        newTransaction = {
+            'id': currentID,
+            'type': data['type'],
+            'product_id': data['product_id'],
+            'quantity': data['quantity'], 
+            'date': datetime.now().isoformat()
+            }
+        
+        if ValidateTransaction(newTransaction):
+            transactions.append(newTransaction)
+            return newTransaction, 201
+        else: return {'message': 'Unable to parse data'}, 422
 
 # Class for functions related to a single order (GET[id], PUT, DELETE)
 class TransactionIDRest(Resource):
-    pass
+    def get(self, id):
+        """
+        Find a specific transaction based on its ID
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Returns transaction
+          404:
+            description: Transaction not found
+        """
+        for x in transactions:
+            if x['id'] == id:
+                return x, 200
+        return {'message': 'Order not found'}, 404
+    
+    def put(self, id):
+        """
+        Update an existing transaction
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+          - in: body
+            name: body
+            required: true
+            schema:
+                type: object
+                required:
+                    - type
+                    - product_id
+                    - quantity
+                    - date
+                properties:
+                    type:
+                        type: string
+                    product_id:
+                        type: integer
+                    quantity:
+                        type: integer
+                    date:
+                        type: boolean
+        responses:
+          200:
+            description: Successfully updated the transaction
+          404:
+            description: Transaction not found
+        """
+        data = request.json
+
+        if not ValidateTransaction(data):
+            return {'message': 'Invalid data'}, 422
+
+        for x in transactions:
+            if x['id'] == id:
+                # See Order's PUT function for explanation for these lines
+                if data['date'] == True:
+                    data['date'] = datetime.now().isoformat()
+                else:
+                    data['date'] = x['date']
+                x.update(data)
+                return x, 200
+        return {'message': 'Transaction not found'}, 404
+    
+    def delete(self, id):
+        """
+        Delete a transaction
+        ---
+        parameters:
+          - in: path
+            name: id
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Successfully deleted the transaction
+          404:
+            description: Transaction not found
+        """
+        for i, x in enumerate(transactions):
+            if x['id'] == id:
+                dTransaction = transactions.pop(i)
+                return dTransaction, 200
+        return {'message': 'Transaction not found'}, 404
 
 # API routes
 api.add_resource(ProductREST, '/products')
