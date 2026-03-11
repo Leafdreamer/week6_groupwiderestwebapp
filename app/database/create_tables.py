@@ -44,6 +44,17 @@ def create_tables():
         FOREIGN KEY(product_id) REFERENCES products(id)
     )
     """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password_hash TEXT,
+        role TEXT,
+        created_at TEXT
+    )
+        
+    """)
 
     conn.commit()
     conn.close()
