@@ -1,14 +1,18 @@
-import Dashboard from "./pages/Dashboard";
-import Login from "./components/Login"
+import Thomas from "./pages/Thomas";
+import testTh2 from "./pages/testTh2";
+// import Dashboard from "./pages/Dashboard";
+// import Login from "./components/Login"
 
 
 function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-200">
+    <div className="flex justify-center h-screen ">
 
-    {/* <Login /> */}
-   <Dashboard />
-   </div>
+      {/* <Login /> */}
+      {/* <Dashboard /> */}
+      <Thomas />
+
+    </div>
 
   );
 }
