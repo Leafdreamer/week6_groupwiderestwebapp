@@ -1,4 +1,4 @@
-from database.database import get_connection
+from database import get_connection # make it database, not database.database
 
 
 def create_tables():
@@ -59,3 +59,5 @@ def create_tables():
     conn.commit()
     conn.close()
     print("Tables created")
+    
+create_tables() # TH: Include this line, then run the python file, to create the db with the tabels
