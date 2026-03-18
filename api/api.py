@@ -4,6 +4,7 @@ from flasgger import Swagger
 from flask_cors import CORS
 from datetime import datetime
 from models import ValidateProduct, ValidateOrder, ValidateTransaction
+from db.db import get_db
 
 app = Flask(__name__)
 CORS(app)
@@ -46,29 +47,16 @@ class ProductREST(Resource):
             description: Returns list of products
         """
         """Get all products with optional sorting and search"""
-        # product_list = list(products.values())
+        conn = get_db()
+        cursor = conn.cursor()
 
-        # # GET QUERY PARAMETERS
-        # query_params = request.args
+        cursor.execute("SELECT * FROM products")
+        rows = cursor.fetchall()
 
-        # # Handle 'search' key for default name search
-        # search_term = query_params.get("search")
-        # if search_term:
-        #     pattern = re.compile(search_term, re.IGNORECASE)
-        #     product_list = [p for p in product_list if pattern.search(p['name'])]
+        products = [dict(row) for row in rows]
 
-        # # Handle other keys dynamically (category, price, etc.)
-        # for key, value in query_params.items():
-        #     if key == "search" or key == "sort":
-        #         continue
-        #     product_list = [p for p in product_list if str(p.get(key, "")).lower() == value.lower()]
-
-        # # SORT
-        # if query_params.get("sort") == "name":
-        #     product_list.sort(key=lambda x: x['name'].lower())
-
-        # return product_list, 200
-        return list(products.values()), 200
+        conn.close()
+        return products, 200
     
     def post(self):
         """
@@ -101,29 +89,40 @@ class ProductREST(Resource):
             description: Invalid data (quantity must be INT, price must be a number)
         """
 
-        global next_product_id
+        # global next_product_id
 
-        data = request.json
+        # data = request.json
 
-        if data['name'] in product_names:
-            return {'message': 'Duplicate product'}, 422
+        # if data['name'] in product_names:
+        #     return {'message': 'Duplicate product'}, 422
 
-        newProduct = {
-            'id': next_product_id, 
-            'name': data['name'], 
-            'category': data['category'], 
-            'quantity': data['quantity'], 
-            'price': data['price']
-            }
+        # newProduct = {
+        #     'id': next_product_id, 
+        #     'name': data['name'], 
+        #     'category': data['category'], 
+        #     'quantity': data['quantity'], 
+        #     'price': data['price']
+        #     }
         
-        if ValidateProduct(newProduct):
-            products[next_product_id] = newProduct
-            product_names.add(newProduct['name'])
-            next_product_id += 1
+        # if ValidateProduct(newProduct):
+        #     products[next_product_id] = newProduct
+        #     product_names.add(newProduct['name'])
+        #     next_product_id += 1
 
-            return newProduct, 201
-        else: 
-            return {'message': 'Unable to parse data'}, 422
+        #     return newProduct, 201
+        # else: 
+        #     return {'message': 'Unable to parse data'}, 422
+        conn = get_db()
+        cursor = conn.cursor()
+
+        cursor.execute("INSERT INTO products (name, category, price, quantity) VALUES (Gaming PC, Elektronik, 500.00, 20)")
+        rows = cursor.fetchall()
+
+        products = [dict(row) for row in rows]
+        
+        conn.commit()
+        conn.close()
+        return products, 200
     
 # Class for functions related to a single product (GET[id], PUT, DELETE)
 class ProductIDRest(Resource):
