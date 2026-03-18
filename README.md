@@ -12,7 +12,7 @@ Open api folder in terminal and run following commands:
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-flask --app .\api.py run
+python .\api.py
 ```
 
 # FILES TO HIGHLIGHT
