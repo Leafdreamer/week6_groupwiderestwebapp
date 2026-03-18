@@ -1,13 +1,12 @@
 # BACKEND:
-# Open frontend folder in terminal e.g. git bash
-# IF MISSING
+Open frontend folder in terminal e.g. git bash install dependencies if missing
+
 ```
 npm install lucide-react
 npm start
 ```
 # FRONTEND
-# Open api folder in terminal
-# Run following commands:
+Open api folder in terminal and run following commands:
 
 ```
 python -m venv venv
@@ -16,6 +15,9 @@ pip install -r requirements.txt
 flask --app .\api.py run --port 3000
 ```
 
-FILES TO HIGHLIGHT
-# api/api.py
-# frontend/src/components/ProductsTh.js
+# FILES TO HIGHLIGHT
+
+```
+api/api.py
+frontend/src/components/ProductsTh.js
+```
