@@ -4,11 +4,8 @@ from flasgger import Swagger
 from flask_cors import CORS
 from datetime import datetime
 from models import ValidateProduct, ValidateOrder, ValidateTransaction
-from dotenv import load_dotenv
-import re
 
 app = Flask(__name__)
-load_dotenv()
 CORS(app)
 api = Api(app)
 swagger = Swagger(app)
@@ -544,4 +541,4 @@ api.add_resource(TransactionIDRest, '/transactions/<int:id>')
 
 # Swagger tests are done through /apidocs
 if __name__ == '__main__':
-    app.run(port = 3000, debug = True)
+    app.run(debug = True)

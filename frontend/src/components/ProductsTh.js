@@ -4,10 +4,9 @@ export default function InventoryCards() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products") // 👈 match your Flask route
+    fetch("http://localhost:5000/products")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data); // debug: see what backend returns
         setItems(data);
       })
       .catch((err) => console.error(err));
