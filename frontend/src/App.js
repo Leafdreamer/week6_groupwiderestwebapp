@@ -1,5 +1,5 @@
 import Thomas from "./pages/Thomas";
-import Products from "./components/Products";
+// import Products from "./components/Products";
 // import testTh2 from "./pages/testTh2";
 // import Dashboard from "./pages/Dashboard";
 // import Login from "./components/Login"
