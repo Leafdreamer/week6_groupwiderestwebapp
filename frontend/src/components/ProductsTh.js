@@ -1,14 +1,14 @@
-export default function InventoryCards() {
+export default function ProductsTh() {
   return (
     <div className="overflow-x-auto">
         <table className="w-full text-left text-sm border-separate border-spacing-y-2 px-4">
         <thead>
             <tr className="text-gray-500 uppercase text-[10px] tracking-widest">
-            <th className="p-3">ID</th>
-            <th className="p-3">Produkt Navn</th>
-            <th className="p-3 text-center">Kategori</th>
-            <th className="p-3 text-right">Pris</th>
-            <th className="p-3 text-right">På lager</th>
+            <th className="p-3">⬍ ID</th>
+            <th className="p-3">⬍ Produkt Navn</th>
+            <th className="p-3 text-center">⬍ Kategori</th>
+            <th className="p-3 text-right">⬍ Pris</th>
+            <th className="p-3 text-right">⬍ På lager</th>
             </tr>
         </thead>
         <tbody className="bg-white/80">

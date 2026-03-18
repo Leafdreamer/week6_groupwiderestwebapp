@@ -1,15 +1,12 @@
 import Thomas from "./pages/Thomas";
-import testTh2 from "./pages/testTh2";
-// import Dashboard from "./pages/Dashboard";
-// import Login from "./components/Login"
+// import testTh from "./pages/testTh";
+// import testTh2 from "./pages/testTh2";
 
 
 function App() {
   return (
     <div className="flex justify-center h-screen ">
 
-      {/* <Login /> */}
-      {/* <Dashboard /> */}
       <Thomas />
 
     </div>
